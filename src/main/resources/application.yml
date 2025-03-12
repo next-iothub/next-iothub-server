@@ -1,0 +1,10 @@
+server:
+  port: 8888
+emqx:
+  url: tcp://localhost:1883
+  auth:
+    secret: mysecretkeymysecretkeymysecretkey
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/mqtt
