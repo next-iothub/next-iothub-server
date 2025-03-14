@@ -8,7 +8,8 @@ import lombok.Data;
 @AllArgsConstructor
 public class ConnectParam {
 
-	public String username;
-	public String password;
+	private String clientId;
+	private String username;
+	private String password;
 
 }

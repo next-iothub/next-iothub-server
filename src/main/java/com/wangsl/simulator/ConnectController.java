@@ -1,34 +1,32 @@
 package com.wangsl.simulator;
 
-import org.apache.catalina.User;
+import com.wangsl.common.web.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @RestController
 @RequestMapping("/simulator")
 public class ConnectController {
 
-	private final MqttConnect mqttConnect;
+	private final ConnectService connectService;
 
 	@Autowired
-	public ConnectController(MqttConnect mqttConnect) {
-		this.mqttConnect = mqttConnect;
+	public ConnectController(ConnectService connectService) {
+		this.connectService = connectService;
 	}
 
 	@PostMapping("/connect")
-	public Map<String, Object> deviceConnect(@RequestBody ConnectParam param) {
+	public Result<String> connect(@RequestBody ConnectParam param) {
+		boolean flag = connectService.connect(param);
+		return flag ? Result.success("连接成功") : Result.fail("连接失败");
+	}
 
-		mqttConnect.connect(param.getPassword(), param.getUsername(), param.getPassword());
-
-		Map<String, Object> res = new HashMap<>();
-		res.put("status", 0);
-		res.put("message", "connect successfully");
-		return res;
+	@PostMapping("/disconnect")
+	public Result<String> disConnect(@RequestBody ConnectParam param) {
+		boolean flag = connectService.disConnect(param);
+		return flag ? Result.success("断连成功") : Result.fail("断连失败");
 	}
 }
