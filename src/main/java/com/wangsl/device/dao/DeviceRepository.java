@@ -1,5 +1,6 @@
 package com.wangsl.device.dao;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -7,9 +8,14 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface DeviceRepository extends MongoRepository<Device, String> {
+public interface DeviceRepository extends MongoRepository<Device, ObjectId> {
 
-	// 仅返回 productName、deviceName、secret
-	@Query(value = "{}", fields = "{'productName': 1, 'deviceName': 1, 'secret': 1}")
-	List<Device> findAllDevices();
+	@Query("{'productName': ?0, 'deviceName': ?1}")
+	Device findDeviceByDeviceNameAndDeviceName(String productName, String deviceName);
+
+	@Query("{'productName': ?0}")
+	List<Device> findByProductName(String productName);
+
+	@Query("{'username': ?0}")
+	Device findByUsername(String username);
 }

@@ -1,10 +1,12 @@
 package com.wangsl.device.register;
 
+import com.wangsl.common.web.Result;
 import com.wangsl.device.dao.Device;
 import com.wangsl.device.dao.DeviceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.management.relation.RelationSupport;
 import java.util.*;
 
 @RestController
@@ -24,7 +26,7 @@ public class DeviceRegister {
 	 * @return
 	 */
 	@PostMapping("/register")
-	public Map<String, Object> registerDevice(@RequestParam String productName) {
+	public Result<AuthKey> registerDevice(@RequestParam String productName) {
 		// 生成三元组
 		String deviceName = generateDeviceName(productName);
 		String secret = generateSecret();
@@ -40,18 +42,18 @@ public class DeviceRegister {
 			.build();
 		deviceRepository.save(device);
 
-		Map<String, Object> res = new HashMap<>();
-		res.put("productName", productName);
-		res.put("deviceName", deviceName);
-		res.put("secret", secret);
-		System.out.println("1");
-		return res;
+		AuthKey authKey = AuthKey.builder()
+			.productName(productName)
+			.deviceName(deviceName)
+			.secret(secret).build();
+
+		return Result.success(authKey);
 	}
 
 	// 基于 productName 生成随机的 deviceName
 	private String generateDeviceName(String productName) {
 		String randomSuffix = getRandomString(8); // 生成一个随机的后缀
-		return productName + "-" + randomSuffix;
+		return randomSuffix;
 	}
 
 	// 生成一个随机的 secret (可以使用 UUID)
