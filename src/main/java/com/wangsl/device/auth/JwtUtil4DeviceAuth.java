@@ -1,4 +1,4 @@
-package com.wangsl.auth;
+package com.wangsl.device.auth;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -11,7 +11,7 @@ import java.security.Key;
 import java.util.Date;
 
 @Component
-public class JwtUtil {
+public class JwtUtil4DeviceAuth {
 
 	@Value("${emqx.auth.secret}")
 	private String SECRET_KEY; // 256-bit 密钥
