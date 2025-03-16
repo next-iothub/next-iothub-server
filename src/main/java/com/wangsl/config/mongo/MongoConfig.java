@@ -1,6 +1,6 @@
-package com.wangsl.config;
+package com.wangsl.config.mongo;
 
-import com.wangsl.config.converter.BsonTimestampToDateConverter;
+import com.wangsl.config.mongo.converter.BsonTimestampToDateConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;

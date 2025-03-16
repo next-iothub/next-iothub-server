@@ -1,4 +1,4 @@
-package com.wangsl.device.dao;
+package com.wangsl.device.repository;
 
 import lombok.Builder;
 import lombok.Data;

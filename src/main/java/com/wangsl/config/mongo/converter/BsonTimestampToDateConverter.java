@@ -1,4 +1,4 @@
-package com.wangsl.config.converter;
+package com.wangsl.config.mongo.converter;
 
 import org.bson.BsonTimestamp;
 import org.springframework.core.convert.converter.Converter;

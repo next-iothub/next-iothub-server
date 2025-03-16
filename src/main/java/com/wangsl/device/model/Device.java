@@ -1,13 +1,17 @@
-package com.wangsl.device.dao;
+package com.wangsl.device.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @Document(collection = "device")
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class Device {
 
@@ -19,5 +23,6 @@ public class Device {
 	private String productName; // 产品名
 	private String deviceName; // 设备名
 	private String secret; // 设备密钥
+	private Boolean active; // 设备状态 true可用
 
 }
