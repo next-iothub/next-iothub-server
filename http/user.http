@@ -1,0 +1,29 @@
+### register
+POST http://{{url}}/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "test",
+  "password": "test"
+}
+
+### login
+POST http://{{url}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "test",
+  "password": "test"
+}
+
+###
+GET http://{{url}}/api/authority/r2
+Authorization: Bearer {{auth_token}}
+
+###
+GET http://{{url}}/api/authority/r1
+Authorization: Bearer {{auth_token}}
+
+###
+GET http://localhost:8888/api/authority/r4
+Authorization: Bearer {{auth_token}}
