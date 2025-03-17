@@ -1,22 +1,23 @@
 package com.wangsl.device.repository;
 
 import com.wangsl.device.model.Device;
+import com.wangsl.device.model.Product;
 import org.bson.types.ObjectId;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface DeviceRepository extends MongoRepository<Device, ObjectId> {
 
-	@Query("{'productName': ?0, 'deviceName': ?1}")
-	Device findByProductNameAndDeviceName(String productName, String deviceName);
+	Optional<Device> findByDeviceNameAndProductKey(String deviceName, String productKey);
 
-	@Query("{'productName': ?0}")
-	List<Device> findByProductName(String productName);
+	// 根据 productKey 进行分页查询
+	Page<Device> findByProductKey(String productKey, Pageable pageable);
 
-	@Query("{'username': ?0}")
-	Device findByUsername(String username);
 }

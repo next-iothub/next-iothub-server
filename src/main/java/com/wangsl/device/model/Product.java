@@ -11,24 +11,16 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Date;
 
 @Data
-@Document(collection = "device")
+@Document(collection = "products")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Device {
-
+public class Product {
 	@Id
 	private ObjectId id;  // MongoDB 自动生成的唯一ID
-	private ObjectId productId; // 产品id
+	private ObjectId userId; // 产品所属用户id
+	private String productName; // 产品名称
 	private String productKey; // 产品key
-	private String deviceName; // 设备名称 唯一的
-	private String nickName; // 备注名称
-	private String status; // 设备状态
+	private String description; // 产品描述
 	private Date createTime; // 创建时间
-	private Date lastOnlineTime; // 上次在线时间
-	private String deviceSecret; // 设备密钥
-	private String username; // mqtt 用户名（）
-	private String password; // mqtt 密码
-	private String clientId; // 客户端id
-
 }

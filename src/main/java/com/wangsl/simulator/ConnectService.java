@@ -32,8 +32,15 @@ public class ConnectService {
 	 */
 	public boolean connect(ConnectParam param) {
 		try {
+
 			// 创建连接
 			String clientId = param.getClientId();
+			if (clientMap.containsKey(clientId)) {
+				MqttClient client = clientMap.get(clientId);
+				if(!client.isConnected())
+					client.reconnect();
+				return true;
+			}
 			MqttClient client = new MqttClient(MQTT_BROKER_URL, clientId, new MemoryPersistence());
 
 			// 连接参数
@@ -41,6 +48,7 @@ public class ConnectService {
 			options.setUserName(param.getUsername());
 			options.setPassword(param.getPassword().getBytes());
 			options.setCleanStart(false);
+			options.setSessionExpiryInterval(60 * 60L);
 			options.setAutomaticReconnect(true);
 
 			// 连接到 Broker
