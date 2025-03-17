@@ -3,3 +3,51 @@
 GET http://localhost:8888/api/authority/r2
 Authorization: Bearer {{auth_token}}
 ###
+
+POST http://{{url}}/api/device/register?
+    productName=tttest
+Content-Type: application/x-www-form-urlencoded
+Authorization: Bearer {{auth_token}}
+
+###
+POST http://{{url}}/api/products
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "productName": "测试产品3",
+  "description": "这是一个测试产品"
+}
+
+###
+GET http://{{url}}/api/products/{{productKey}}
+Authorization: Bearer {{auth_token}}
+
+###
+GET http://{{url}}/api/products/user/list?
+    page=0&
+    size=2
+Authorization: Bearer {{auth_token}}
+
+###
+DELETE http://{{url}}/api/products/{{productId}}
+Authorization: Bearer {{auth_token}}
+
+###
+POST http://{{url}}/api/devices/register
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "deviceName": "test_device5",
+  "nickName": "测试设备5",
+  "productKey": "efl4rbBGDN30Mg"
+}
+
+
+###
+GET http://{{url}}/api/devices/product/list?
+    productKey=efl4rbBGDN30Mg&
+    page=1&
+    size=2
+Authorization: Bearer {{auth_token}}

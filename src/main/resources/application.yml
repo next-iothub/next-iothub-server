@@ -1,4 +1,6 @@
 server:
+  servlet:
+    context-path: /api
   port: 8888
 emqx:
   url: tcp://localhost:1883
