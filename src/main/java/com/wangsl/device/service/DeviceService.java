@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.sound.midi.MidiDeviceReceiver;
 import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
@@ -65,6 +66,7 @@ public class DeviceService {
 		device.setDeviceSecret(generateSecret());
 		device.setUsername(generateUsername(device));
 		device.setPassword(device.getDeviceSecret());
+		device.setActive(true);
 
 		return deviceRepository.save(device);
 	}
@@ -105,7 +107,7 @@ public class DeviceService {
 	 * @param size
 	 * @return
 	 */
-	public Page<Device> getProductsByUserId(String productKey, int page, int size) {
+	public Page<Device> getDevicesByUserId(String productKey, int page, int size) {
 		// 检查productKey是否存在于当前用户
 		ObjectId currentUserId = SecurityContextUtil.getCurrentUserId();
 		Optional<Product> productOptional = productRepository.findByUserIdAndProductKey(currentUserId, productKey);
@@ -117,5 +119,26 @@ public class DeviceService {
 		Pageable pageable = PageRequest
 			.of(page, size, Sort.by(Sort.Order.asc("createTime"))); // 按创建时间升序排序
 		return deviceRepository.findByProductKey(productKey, pageable);
+	}
+
+	/**
+	 * 查询状态
+	 * @param productKey
+	 * @param deviceName
+	 * @return
+	 */
+	public String getDeviceStatus(String productKey, String deviceName) {
+		// 检查productKey是否存在于当前用户
+		ObjectId currentUserId = SecurityContextUtil.getCurrentUserId();
+		Optional<Product> productOptional = productRepository.findByUserIdAndProductKey(currentUserId, productKey);
+		if (productOptional.isEmpty()) {
+			IothubException.cast("Invalid product key.");
+		}
+
+		Optional<Device> optionalDevice = deviceRepository.findByDeviceNameAndProductKey(deviceName, productKey);
+		if(optionalDevice.isPresent()){
+			return optionalDevice.get().getStatus();
+		}
+		return "offline";
 	}
 }

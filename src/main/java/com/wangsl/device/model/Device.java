@@ -30,5 +30,6 @@ public class Device {
 	private String username; // mqtt 用户名（）
 	private String password; // mqtt 密码
 	private String clientId; // 客户端id
+	private Boolean active; // 设备是否启用
 
 }

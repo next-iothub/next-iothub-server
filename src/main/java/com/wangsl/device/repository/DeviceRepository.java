@@ -17,6 +17,8 @@ public interface DeviceRepository extends MongoRepository<Device, ObjectId> {
 
 	Optional<Device> findByDeviceNameAndProductKey(String deviceName, String productKey);
 
+
+
 	// 根据 productKey 进行分页查询
 	Page<Device> findByProductKey(String productKey, Pageable pageable);
 

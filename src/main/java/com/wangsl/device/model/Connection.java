@@ -15,11 +15,11 @@ import java.util.Date;
 public class Connection {
 	@Id
 	private ObjectId id;
-	private ObjectId deviceId; // 关联设备 ID
 	private String clientId; // 连接客户端id
-	private String status; // 连接状态
+	private Boolean status; // 连接状态 true 在线，false 离线
 	private String ipAddress; // ip地址
 	private Date connectedAt; // 连接时间
 	private Date disconnectedAt; // 下线时间
+	private Integer keepalive; // 保活时间
 
 }

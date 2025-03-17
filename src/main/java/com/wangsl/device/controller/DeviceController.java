@@ -1,14 +1,10 @@
 package com.wangsl.device.controller;
 
-import com.wangsl.common.utils.SecurityContextUtil;
 import com.wangsl.common.web.model.Result;
 import com.wangsl.device.model.Device;
-import com.wangsl.device.model.Product;
 import com.wangsl.device.model.dto.DeviceDTO;
 import com.wangsl.device.service.DeviceService;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,11 +42,22 @@ public class DeviceController {
 		@RequestParam String productKey,
 		@RequestParam int page,
 		@RequestParam int size) {
-		Page<Device> productPage = deviceService.getProductsByUserId(productKey, page, size);
+		Page<Device> productPage = deviceService.getDevicesByUserId(productKey, page, size);
 		return Result.success(productPage);
 	}
 
 	// 删除设备接口 参数prokey devicename userid
 
-
+	/**
+	 * 查询设备在线状态
+	 * @param productKey
+	 * @param deviceName
+	 * @return
+	 */
+	@GetMapping("/status/{productKey}/{deviceName}")
+	public Result<String> getDeviceStatus(@PathVariable String productKey, @PathVariable String deviceName) {
+		// todo: 缓存设备状态
+		String status = deviceService.getDeviceStatus(productKey, deviceName);
+		return Result.success(status);
+	}
 }
