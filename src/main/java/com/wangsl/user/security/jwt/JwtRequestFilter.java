@@ -1,5 +1,6 @@
 package com.wangsl.user.security.jwt;
 
+import com.wangsl.user.security.config.CustomUserDetails;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -43,12 +44,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
 		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 			// 当使用token时，从token解析username去查询用户信息
-			UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+			CustomUserDetails customUserDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(username);
 
-			if (username.equals(userDetails.getUsername())) {
+			if (username.equals(customUserDetails.getUsername())) {
 				// 创建一个身份认证对象
 				UsernamePasswordAuthenticationToken authentication =
-					new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+					new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
 
 				// 设置身份认证信息到 SecurityContext 中，这样后续的代码可以直接使用这个用户信息
 				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

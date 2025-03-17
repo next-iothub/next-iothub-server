@@ -1,14 +1,14 @@
 package com.wangsl.user.controller;
 
-import com.wangsl.common.web.Result;
+import com.wangsl.common.exception.ex.IothubException;
+import com.wangsl.common.exception.ex.UnauthorizedException;
+import com.wangsl.common.web.model.Result;
 import com.wangsl.user.model.LoginParam;
 import com.wangsl.user.model.User;
 import com.wangsl.user.repository.UserRepository;
+import com.wangsl.user.security.config.CustomUserDetails;
 import com.wangsl.user.security.jwt.JwtUtil;
 import com.wangsl.user.service.UserService;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 public class AuthController {
 
 	private final UserService userService;
@@ -53,8 +53,8 @@ public class AuthController {
 
 		// 认证通过将 authentication 保存在 security context
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-		String jwtToken = jwtUtil.generateToken(userDetails);
+		CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+		String jwtToken = jwtUtil.generateToken(customUserDetails);
 		return Result.success(jwtToken);
 	}
 

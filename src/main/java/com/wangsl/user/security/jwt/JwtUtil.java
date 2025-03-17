@@ -1,6 +1,7 @@
 package com.wangsl.user.security.jwt;
 
 import com.wangsl.user.model.User;
+import com.wangsl.user.security.config.CustomUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -41,7 +42,7 @@ public class JwtUtil {
 	/**
 	 * 生成token
 	 */
-	public String generateToken(UserDetails userDetails) {
+	public String generateToken(CustomUserDetails customUserDetails) {
 		// 令牌id
 		String uuid = UUID.randomUUID().toString();
 		// 过期时间
@@ -51,8 +52,9 @@ public class JwtUtil {
 			.add("typ", "JWT")
 			.add("alg", "HS256")
 			.and()
-			.claim("username", userDetails.getUsername()) // payload 负载信息
-			.claim("roles", userDetails.getAuthorities()) // payload 负载信息
+			.claim("username", customUserDetails.getUsername()) // payload 负载信息
+			.claim("id", customUserDetails.getId()) // payload 负载信息
+			.claim("roles", customUserDetails.getAuthorities()) // payload 负载信息
 			.id(uuid) // 令牌ID
 			.subject(SUBJECT) // 主题
 			.issuer(JWT_ISS) // 签发者

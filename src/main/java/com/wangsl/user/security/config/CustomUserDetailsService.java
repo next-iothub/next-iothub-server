@@ -27,7 +27,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 	}
 
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		User user = userRepository.findByUsername(username);
 		if(user == null){
 			throw new UsernameNotFoundException(username + "is not exists");
@@ -43,10 +43,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 			authorities.add(new SimpleGrantedAuthority(authority));
 		}
 
-		return new org.springframework.security.core.userdetails.User(
-			user.getUsername(),
-			user.getPassword(),
-			authorities // 权限
-		);
+		return new CustomUserDetails(user.getUsername(), user.getPassword(), authorities, user.getId());
 	}
 }
