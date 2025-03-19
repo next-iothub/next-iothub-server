@@ -1,6 +1,8 @@
 package com.wangsl.user.service;
 
+import com.wangsl.common.utils.SecurityContextUtil;
 import com.wangsl.user.model.User;
+import com.wangsl.user.model.vo.UserInfoVO;
 import com.wangsl.user.repository.UserRepository;
 import com.wangsl.user.security.jwt.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +55,19 @@ public class UserService {
 		user.setAuthorities(Collections.singletonList("BASIC")); // 默认权限
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		return userRepository.save(user);
+	}
+
+	/**
+	 * 获取用户基本信息
+	 * @return
+	 */
+	public UserInfoVO getUserInfo() {
+		UserInfoVO userInfoVO = UserInfoVO.builder()
+			.userId(SecurityContextUtil.getCurrentUserId().toString())
+			.userName(SecurityContextUtil.getCurrentUsername())
+			.roles(SecurityContextUtil.getAuthoritiesAndRole())
+			.build();
+		return userInfoVO;
 	}
 
 	/**

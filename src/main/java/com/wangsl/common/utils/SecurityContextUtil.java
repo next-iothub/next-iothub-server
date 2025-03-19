@@ -3,8 +3,13 @@ package com.wangsl.common.utils;
 import com.wangsl.user.security.config.CustomUserDetails;
 import org.bson.types.ObjectId;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class SecurityContextUtil {
 
@@ -39,6 +44,20 @@ public class SecurityContextUtil {
 			if (principal instanceof UserDetails) {
 				return ((CustomUserDetails) principal).getId();
 			}
+		}
+		return null;
+	}
+
+
+	public static List<String> getAuthoritiesAndRole(){
+		Authentication authentication = getAuthentication();
+		if (authentication != null && authentication.isAuthenticated()) {
+			Collection<? extends GrantedAuthority> authorities =
+				authentication.getAuthorities();
+			List<String> authoritiesString = authorities.stream()
+				.map(GrantedAuthority::getAuthority)
+				.toList();
+			return authoritiesString;
 		}
 		return null;
 	}

@@ -11,6 +11,6 @@ public class WebConfig implements WebMvcConfigurer {
 	public void addCorsMappings(CorsRegistry registry) {
 		// 允许 http://localhost:8081 来源的请求访问所有接口
 		registry.addMapping("/**")
-			.allowedOrigins("http://localhost:8081");
+			.allowedOrigins("http://localhost:8081", "http://localhost:9527");
 	}
 }

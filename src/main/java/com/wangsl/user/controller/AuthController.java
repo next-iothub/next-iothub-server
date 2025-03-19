@@ -5,6 +5,7 @@ import com.wangsl.common.exception.ex.UnauthorizedException;
 import com.wangsl.common.web.model.Result;
 import com.wangsl.user.model.LoginParam;
 import com.wangsl.user.model.User;
+import com.wangsl.user.model.vo.LoginVO;
 import com.wangsl.user.repository.UserRepository;
 import com.wangsl.user.security.config.CustomUserDetails;
 import com.wangsl.user.security.jwt.JwtUtil;
@@ -45,17 +46,21 @@ public class AuthController {
 	 * @return
 	 */
 	@PostMapping("/login")
-	public Result<String> login(@RequestBody LoginParam loginParam) {
+	public Result<LoginVO> login(@RequestBody LoginParam loginParam) {
 		// 认证
 		Authentication authentication = authenticationManager.authenticate(
-			new UsernamePasswordAuthenticationToken(loginParam.getUsername(), loginParam.getPassword())
+			new UsernamePasswordAuthenticationToken(loginParam.getUserName(), loginParam.getPassword())
 		);
 
 		// 认证通过将 authentication 保存在 security context
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
 		String jwtToken = jwtUtil.generateToken(customUserDetails);
-		return Result.success(jwtToken);
+
+		LoginVO loginVO = new LoginVO();
+		loginVO.setToken(jwtToken);
+		loginVO.setRefreshToken(jwtToken);
+		return Result.success(loginVO);
 	}
 
 

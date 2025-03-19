@@ -1,6 +1,6 @@
 package com.wangsl.simulator;
 
-import com.wangsl.common.web.Result;
+import com.wangsl.common.web.model.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
