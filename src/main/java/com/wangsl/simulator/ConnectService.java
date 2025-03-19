@@ -1,5 +1,11 @@
 package com.wangsl.simulator;
 
+import com.wangsl.common.utils.SecurityContextUtil;
+import com.wangsl.simulator.model.ConnectParam;
+import com.wangsl.simulator.model.PublishMessageParam;
+import com.wangsl.simulator.util.MqttUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.bson.types.ObjectId;
 import org.eclipse.paho.mqttv5.client.IMqttToken;
 import org.eclipse.paho.mqttv5.client.MqttClient;
 import org.eclipse.paho.mqttv5.client.MqttConnectionOptions;
@@ -18,6 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 1. 使用Paho MQTT客户端实现MQTT的连接
  * 2. 使用ConcurrentHashMap维护连接状态
  */
+@Slf4j
 @Service
 public class ConnectService {
 
@@ -32,9 +39,9 @@ public class ConnectService {
 	 */
 	public boolean connect(ConnectParam param) {
 		try {
-
+			ObjectId userId = SecurityContextUtil.getCurrentUserId();
 			// 创建连接
-			String clientId = param.getClientId();
+			String clientId = param.getProductKey() + "." + param.getDeviceName() + "." + userId.toString();
 			if (clientMap.containsKey(clientId)) {
 				MqttClient client = clientMap.get(clientId);
 				if(!client.isConnected())
@@ -45,8 +52,8 @@ public class ConnectService {
 
 			// 连接参数
 			MqttConnectionOptions options = new MqttConnectionOptions();
-			options.setUserName(param.getUsername());
-			options.setPassword(param.getPassword().getBytes());
+			options.setUserName(param.getProductKey() + "&" + param.getDeviceName());
+			options.setPassword(param.getSecret().getBytes());
 			options.setCleanStart(false);
 			options.setSessionExpiryInterval(60 * 60L);
 			options.setAutomaticReconnect(true);
@@ -60,12 +67,12 @@ public class ConnectService {
 
 			// 判断连接是否成功
 			if (returnCode == 0) {
-				System.out.println("Connected successfully. Return code: " + returnCode + ", sessionPresent: " + sessionPresent);
+				log.info("Connected successfully. Return code: {}, sessionPresent: {}", returnCode, sessionPresent);
 				// 保存设备连接
 				clientMap.put(clientId, client);
 				return true;
 			} else {
-				System.out.println("Connection failed. Return code: " + returnCode + ", sessionPresent: " + sessionPresent);
+				log.info("Connection failed. Return code: {}, sessionPresent: {}", returnCode, sessionPresent);
 				return false;
 			}
 
@@ -97,9 +104,7 @@ public class ConnectService {
 			int returnCode = connAck.getReturnCode();
 			boolean sessionPresent = connAck.getSessionPresent();
 
-
 			System.out.println("return code: " + returnCode + ", sessionPresent: " + sessionPresent);
-
 
 			clientMap.put(token, client); // 保存设备连接
 			return true;
@@ -116,7 +121,10 @@ public class ConnectService {
 		 */
 	public boolean disConnect(ConnectParam param) {
 		try {
-			String clientId = param.getClientId();
+
+			ObjectId userId = SecurityContextUtil.getCurrentUserId();
+			// 创建连接
+			String clientId = param.getProductKey() + "." + param.getDeviceName() + "." + userId.toString();
 			MqttClient client = clientMap.get(clientId);
 			if (client != null && client.isConnected()) {
 				client.disconnect();
@@ -127,5 +135,46 @@ public class ConnectService {
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+	/**
+	 * 上行数据
+	 * @param param
+	 * @return
+	 */
+	public boolean uploadData(PublishMessageParam param) {
+		// 需要判断是否连接
+		String clientId = calcClientId(param.getProductKey(), param.getDeviceName());
+		if(clientMap.containsKey(clientId)){
+			MqttClient client = clientMap.get(clientId);
+			String messageId = generateMsgId();
+			final String uploadDataTopic = "upload_data/"
+				+ param.getProductKey()
+				+ "/" + param.getDeviceName()
+				+ "/" + param.getDataType()
+				+ "/" + messageId;
+			MqttUtil.publishMessage(client, uploadDataTopic, param.getMessage(), param.getQos());
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * 生成消息id
+	 * @return
+	 */
+	private String generateMsgId() {
+		return ObjectId.get().toHexString();
+	}
+
+	/**
+	 * 获取clientid
+	 * @param productKey
+	 * @param deviceName
+	 * @return
+	 */
+	private String calcClientId(String productKey, String deviceName){
+		ObjectId userId = SecurityContextUtil.getCurrentUserId();
+		return productKey + "." + deviceName + "." + userId.toString();
 	}
 }
