@@ -1,7 +1,7 @@
 package com.wangsl.device.controller;
 
+import com.wangsl.common.api.Result;
 import com.wangsl.common.utils.SecurityContextUtil;
-import com.wangsl.common.web.model.Result;
 import com.wangsl.device.model.Product;
 import com.wangsl.device.model.dto.ProductDTO;
 import com.wangsl.device.model.vo.ProductVO;
@@ -44,7 +44,7 @@ public class ProductController {
 	public Result<Product> getProductByProductKey(@PathVariable String productKey) {
 		ObjectId currentUserId = SecurityContextUtil.getCurrentUserId();
 		Product product = productService.getProductByProductKey(productKey, currentUserId);
-		return product != null ? Result.success(product) : Result.fail("未找到");
+		return product != null ? Result.success(product) : Result.failed("未找到");
 	}
 
 	/**
@@ -75,9 +75,9 @@ public class ProductController {
 		ObjectId currentUserId = SecurityContextUtil.getCurrentUserId();
 		boolean isDeleted = productService.deleteProduct(currentUserId, productId);
 		if (isDeleted) {
-			return Result.success("Product deleted successfully");
+			return Result.success();
 		} else {
-			return Result.fail().code(404).msg("Product not found or not owned by the user");
+			return Result.failed("Product not found or not owned by the user");
 		}
 	}
 

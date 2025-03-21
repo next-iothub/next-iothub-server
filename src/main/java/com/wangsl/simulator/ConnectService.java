@@ -10,6 +10,7 @@ import org.eclipse.paho.mqttv5.client.IMqttToken;
 import org.eclipse.paho.mqttv5.client.MqttClient;
 import org.eclipse.paho.mqttv5.client.MqttConnectionOptions;
 import org.eclipse.paho.mqttv5.client.persist.MemoryPersistence;
+import org.eclipse.paho.mqttv5.client.persist.MqttDefaultFilePersistence;
 import org.eclipse.paho.mqttv5.common.MqttException;
 import org.eclipse.paho.mqttv5.common.packet.MqttConnAck;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,8 +31,8 @@ public class ConnectService {
 
 	@Value("${emqx.url}")
 	private String MQTT_BROKER_URL;
-	private final Map<String, MqttClient> clientMap = new ConcurrentHashMap<>(); // 维护设备连接状态
 
+	private final Map<String, MqttClient> clientMap = new ConcurrentHashMap<>(); // 维护设备连接状态
 	/**
 	 * 连接设备
 	 * @param param
@@ -48,8 +49,14 @@ public class ConnectService {
 					client.reconnect();
 				return true;
 			}
-			MqttClient client = new MqttClient(MQTT_BROKER_URL, clientId, new MemoryPersistence());
+			
 
+			// 获取当前项目的根目录
+			String projectRoot = System.getProperty("user.dir");
+
+			// 设置 MQTT 持久化数据的保存路径
+			String persistencePath = projectRoot + "/mqtt";
+			MqttClient client = new MqttClient(MQTT_BROKER_URL, clientId, new MqttDefaultFilePersistence(persistencePath));
 			// 连接参数
 			MqttConnectionOptions options = new MqttConnectionOptions();
 			options.setUserName(param.getProductKey() + "&" + param.getDeviceName());

@@ -10,3 +10,16 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost:27017/mqtt
+jwt:
+  expiration: 86400
+  iss: Austin Slwang
+  subject: Peripherals
+
+# 日志配置
+logging:
+  config: classpath:logback-spring.xml
+  file:
+    path: logs/iothub
+  level:
+    root: info
+    com.wangsl: debug

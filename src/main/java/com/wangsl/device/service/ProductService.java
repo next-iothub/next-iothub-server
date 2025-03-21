@@ -1,6 +1,7 @@
 package com.wangsl.device.service;
 
-import com.wangsl.common.exception.ex.IothubException;
+import com.wangsl.common.exception.IothubExceptionEnum;
+import com.wangsl.common.exception.ExceptionUtil;
 import com.wangsl.device.model.Product;
 import com.wangsl.device.model.dto.ProductDTO;
 import com.wangsl.device.model.vo.ProductVO;
@@ -16,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.Random;
-import java.util.UUID;
 
 @Service
 public class ProductService {
@@ -38,7 +38,7 @@ public class ProductService {
 	public ProductVO createProduct(ProductDTO productDTO, ObjectId currentUserId) {
 		// 查重
 		if (productRepository.findByUserIdAndProductName(currentUserId, productDTO.getProductName()).isPresent()) {
-			IothubException.cast("Product name already exists for this user");
+			ExceptionUtil.throwEx(IothubExceptionEnum.ERROR_PRODUCT_NAME_EXIST);
 		}
 
 		Product product = Product.builder()
@@ -66,7 +66,7 @@ public class ProductService {
 			.orElse(null);
 
 		if (product == null) {
-			IothubException.cast("不存在");
+			ExceptionUtil.throwEx(IothubExceptionEnum.ERROR_PRODUCT_NAME_EXIST);
 		}
 
 		return product;

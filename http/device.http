@@ -12,11 +12,11 @@ Authorization: Bearer {{auth_token}}
 ###
 POST http://{{url}}/api/products
 Content-Type: application/json
-Authorization: Bearer {{auth_token}}
+Authorization: {{auth_token}}
 
 {
-  "productName": "测试产品3",
-  "description": "这是一个测试产品"
+  "productName": "模拟器测试设备",
+  "description": "模拟器测试设备"
 }
 
 ###
@@ -36,12 +36,12 @@ Authorization: Bearer {{auth_token}}
 ###
 POST http://{{url}}/api/devices/register
 Content-Type: application/json
-Authorization: Bearer {{auth_token}}
+Authorization: {{auth_token}}
 
 {
-  "deviceName": "test_device5",
-  "nickName": "测试设备5",
-  "productKey": "efl4rbBGDN30Mg"
+  "deviceName": "simulator_dev",
+  "nickName": "模拟器测试设备",
+  "productKey": "yiEmvHjgVemX3V"
 }
 
 

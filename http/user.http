@@ -3,17 +3,18 @@ POST http://{{url}}/api/auth/register
 Content-Type: application/json
 
 {
-  "username": "test2",
-  "password": "test2"
+  "userName": "Admin",
+  "password": "Admin"
 }
+### wangsl / wangsl
 
 ### login
 POST http://{{url}}/api/auth/login
 Content-Type: application/json
 
 {
-  "username": "test2",
-  "password": "test2"
+  "userName": "Super",
+  "password": "Super"
 }
 
 ###

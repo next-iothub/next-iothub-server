@@ -1,6 +1,6 @@
 package com.wangsl.device.controller;
 
-import com.wangsl.common.web.model.Result;
+import com.wangsl.common.api.Result;
 import com.wangsl.device.model.Device;
 import com.wangsl.device.model.dto.DeviceDTO;
 import com.wangsl.device.service.DeviceService;

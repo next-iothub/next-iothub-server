@@ -1,0 +1,28 @@
+### GET request to example server
+GET https://examples.http-client.intellij.net/get
+    ?generated-in=IntelliJ IDEA
+
+### 设备上行数据
+POST http://{{url}}/api/simulator/upload/data
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6IndhbmdzbCIsImlkIjp7InRpbWVzdGFtcCI6MTc0MjM4NDY2NiwiZGF0ZSI6MTc0MjM4NDY2NjAwMH0sInJvbGVzIjpbeyJhdXRob3JpdHkiOiJCQVNJQyJ9LHsiYXV0aG9yaXR5IjoiUk9MRV9VU0VSIn1dLCJqdGkiOiIwNWZmNTE2ZC1lMTZmLTQ3NTgtODRiNC0wNmYwNTE3NzU2NmEiLCJzdWIiOiJQZXJpcGhlcmFscyIsImlzcyI6IkF1c3RpbiBTbHdhbmciLCJpYXQiOjE3NDIzOTE3MDEsImV4cCI6MTc0MjQ3ODEwMX0.42NKyDxzE_hfBvQ73dQ44WlW6VGhJCxX2r-5MQHk2uI
+
+{
+  "productKey": "yiEmvHjgVemX3V",
+  "deviceName": "simulator_dev",
+  "message": "hello world",
+  "dataType": "String",
+  "qos": 1
+}
+
+
+### 设备连接
+POST http://{{url}}/api/simulator/connect
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6IndhbmdzbCIsImlkIjp7InRpbWVzdGFtcCI6MTc0MjM4NDY2NiwiZGF0ZSI6MTc0MjM4NDY2NjAwMH0sInJvbGVzIjpbeyJhdXRob3JpdHkiOiJCQVNJQyJ9LHsiYXV0aG9yaXR5IjoiUk9MRV9VU0VSIn1dLCJqdGkiOiIwNWZmNTE2ZC1lMTZmLTQ3NTgtODRiNC0wNmYwNTE3NzU2NmEiLCJzdWIiOiJQZXJpcGhlcmFscyIsImlzcyI6IkF1c3RpbiBTbHdhbmciLCJpYXQiOjE3NDIzOTE3MDEsImV4cCI6MTc0MjQ3ODEwMX0.42NKyDxzE_hfBvQ73dQ44WlW6VGhJCxX2r-5MQHk2uI
+
+{
+  "productKey": "yiEmvHjgVemX3V",
+  "deviceName": "simulator_dev",
+  "secret": "82c88eecc2fa4a6e970eaad8"
+}

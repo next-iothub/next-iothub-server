@@ -1,6 +1,7 @@
 package com.wangsl.device.service;
 
-import com.wangsl.common.exception.ex.IothubException;
+import com.wangsl.common.exception.IothubExceptionEnum;
+import com.wangsl.common.exception.ExceptionUtil;
 import com.wangsl.common.utils.SecurityContextUtil;
 import com.wangsl.device.model.Device;
 import com.wangsl.device.model.Product;
@@ -15,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import javax.sound.midi.MidiDeviceReceiver;
 import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
@@ -45,13 +45,13 @@ public class DeviceService {
 		ObjectId currentUserId = SecurityContextUtil.getCurrentUserId();
 		Optional<Product> productOptional = productRepository.findByUserIdAndProductKey(currentUserId, deviceDTO.getProductKey());
 		if (productOptional.isEmpty()) {
-			IothubException.cast("Invalid product key.");
+			ExceptionUtil.throwEx(IothubExceptionEnum.ERROR_PRODUCT_KEY_INVALID);
 		}
 
 		// 检查设备名称是否已存在
 		Optional<Device> existingDevice = deviceRepository.findByDeviceNameAndProductKey(deviceDTO.getDeviceName(), deviceDTO.getProductKey());
 		if (existingDevice.isPresent()) {
-			IothubException.cast("Device name already exists.");
+			ExceptionUtil.throwEx(IothubExceptionEnum.ERROR_DEVICE_NAME_EXIST);
 		}
 
 		// 创建设备对象
@@ -112,7 +112,7 @@ public class DeviceService {
 		ObjectId currentUserId = SecurityContextUtil.getCurrentUserId();
 		Optional<Product> productOptional = productRepository.findByUserIdAndProductKey(currentUserId, productKey);
 		if (productOptional.isEmpty()) {
-			IothubException.cast("Invalid product key.");
+			ExceptionUtil.throwEx(IothubExceptionEnum.ERROR_PRODUCT_KEY_INVALID);
 		}
 
 		// 分页参数
@@ -132,7 +132,7 @@ public class DeviceService {
 		ObjectId currentUserId = SecurityContextUtil.getCurrentUserId();
 		Optional<Product> productOptional = productRepository.findByUserIdAndProductKey(currentUserId, productKey);
 		if (productOptional.isEmpty()) {
-			IothubException.cast("Invalid product key.");
+			ExceptionUtil.throwEx(IothubExceptionEnum.ERROR_PRODUCT_KEY_INVALID);
 		}
 
 		Optional<Device> optionalDevice = deviceRepository.findByDeviceNameAndProductKey(deviceName, productKey);

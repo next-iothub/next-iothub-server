@@ -1,6 +1,6 @@
 package com.wangsl.common.utils;
 
-import com.wangsl.user.security.config.CustomUserDetails;
+import com.wangsl.auth.security.config.CustomUserDetails;
 import org.bson.types.ObjectId;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class SecurityContextUtil {
 

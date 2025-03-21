@@ -1,8 +1,7 @@
 package com.wangsl.device.emqx.hook;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.wangsl.common.exception.ex.IothubException;
-import com.wangsl.common.utils.SecurityContextUtil;
+import com.wangsl.common.exception.IothubExceptionEnum;
+import com.wangsl.common.exception.ExceptionUtil;
 import com.wangsl.device.emqx.model.PublishEventData;
 import com.wangsl.device.model.Connection;
 import com.wangsl.device.model.Device;
@@ -11,7 +10,6 @@ import com.wangsl.device.repository.ConnectionRepository;
 import com.wangsl.device.repository.DeviceRepository;
 import com.wangsl.device.repository.MessageRepository;
 import com.wangsl.device.ws.DeviceStatusWebSocketHandler;
-import io.jsonwebtoken.Header;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -153,7 +151,7 @@ public class HandleService {
 		try {
 			webSocketHandler.sendStatusUpdate(clientId, "offline");
 		} catch (IOException e) {
-			IothubException.cast("设备状态实时推送失败");
+			ExceptionUtil.throwEx(IothubExceptionEnum.ERROR_DEVICE_STATUS);
 		}
 
 		// 3.修改设备信息
@@ -192,7 +190,7 @@ public class HandleService {
 		try {
 			webSocketHandler.sendStatusUpdate(clientId, "online");
 		} catch (IOException e) {
-			IothubException.cast("设备状态实时推送失败");
+			ExceptionUtil.throwEx(IothubExceptionEnum.ERROR_DEVICE_STATUS);
 		}
 
 		// 修改设备信息

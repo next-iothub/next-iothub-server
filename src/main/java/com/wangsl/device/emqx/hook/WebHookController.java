@@ -1,6 +1,6 @@
 package com.wangsl.device.emqx.hook;
 
-import com.wangsl.common.web.model.Result;
+import com.wangsl.common.api.Result;
 import com.wangsl.device.emqx.model.PublishEventData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
