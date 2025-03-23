@@ -1,28 +1,39 @@
 package com.wangsl.auth.model;
 
-import lombok.AllArgsConstructor;
+
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
-@Document(collection = "users")
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Document(collection = "user")
+@Builder
 public class User {
+
 
 	@Id
 	private ObjectId id;  // MongoDB _id
-	private String username;
-	private String password;
-	// 角色（Role）：一般是用户的一种分类，表示用户所属于的一个大类。例如：ADMIN、USER、MANAGER 等。
-	// 权限（Authority）：是更细粒度的权限，表示用户可以访问或操作某个特定的资源。例如：READ_PRIVILEGE、WRITE_PRIVILEGE 等。
+	private String userName; // 用户名
+	private String nickName; // 昵称
+	private String password; // 密码
+	private String userGender; // 性别
+	private String userPhone; // 手机号
+	private String userEmail; // 邮箱
+	private Integer status; // 用户状态 1 正常  2 禁用
+	private LocalDateTime lastLoginTime; // 登录时间
+	private String lastLoginIp; // 登录ip
 	private List<String> roles; // 角色
 	private List<String> authorities; // 权限
-	private Date createTime;
+	private Date createTime; // 创建时间
+	private Date updateTime; // 更新时间
+	private Date deleteTime; // 删除时间
+	private String createBy; // 被谁创建
+	private String updateBy; // 被谁更新
+	private Integer isDeleted; // 是否删除
 }

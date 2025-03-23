@@ -9,8 +9,10 @@ public class WebConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
-		// 允许 http://localhost:8081 来源的请求访问所有接口
 		registry.addMapping("/**")
-			.allowedOrigins("http://localhost:8081", "http://localhost:9527");
+			// 允许指定的HTTP方法：GET, POST, PUT, DELETE, OPTIONS
+			.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+			.allowedOriginPatterns("*"); // 允许任何源发起的请求
 	}
+
 }

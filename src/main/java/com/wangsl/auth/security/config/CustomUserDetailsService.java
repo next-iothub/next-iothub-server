@@ -27,7 +27,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 	@Override
 	public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User user = userRepository.findByUsername(username);
+		User user = userRepository.findByUserName(username);
 		if(user == null){
 			throw new UsernameNotFoundException(username + "is not exists");
 		}
@@ -42,6 +42,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 			authorities.add(new SimpleGrantedAuthority(authority));
 		}
 
-		return new CustomUserDetails(user.getUsername(), user.getPassword(), authorities, user.getId());
+		return new CustomUserDetails(user.getUserName(), user.getPassword(), authorities, user.getId());
 	}
 }
