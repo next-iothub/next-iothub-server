@@ -1,6 +1,5 @@
 package com.wangsl.auth.security.config;
 
-import org.bson.types.ObjectId;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
@@ -8,14 +7,14 @@ import java.util.Collection;
 
 public class CustomUserDetails extends User {
 	// 用户id
-	private final ObjectId id;
+	private final String userId;
 
-	public CustomUserDetails(String username, String password, Collection<? extends GrantedAuthority> authorities, ObjectId id) {
+	public CustomUserDetails(String username, String password, Collection<? extends GrantedAuthority> authorities, String userId) {
 		super(username, password, authorities);
-		this.id = id;
+		this.userId = userId;
 	}
 
-	public ObjectId getId() {
-		return id;
+	public String getUserId() {
+		return userId;
 	}
 }

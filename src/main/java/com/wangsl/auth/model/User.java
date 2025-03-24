@@ -19,6 +19,7 @@ public class User {
 
 	@Id
 	private ObjectId id;  // MongoDB _id
+	private String userId; // 用户id
 	private String userName; // 用户名
 	private String nickName; // 昵称
 	private String password; // 密码

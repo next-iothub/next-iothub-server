@@ -1,7 +1,6 @@
 package com.wangsl.common.utils;
 
 import com.wangsl.auth.security.config.CustomUserDetails;
-import org.bson.types.ObjectId;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,12 +35,12 @@ public class SecurityContextUtil {
 	/**
 	 * 获取当前用户的 ObjectId
 	 */
-	public static ObjectId getCurrentUserId() {
+	public static String getCurrentUserId() {
 		Authentication authentication = getAuthentication();
 		if (authentication != null && authentication.isAuthenticated()) {
 			Object principal = authentication.getPrincipal();
 			if (principal instanceof UserDetails) {
-				return ((CustomUserDetails) principal).getId();
+				return ((CustomUserDetails) principal).getUserId();
 			}
 		}
 		return null;

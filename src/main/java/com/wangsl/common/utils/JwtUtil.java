@@ -57,7 +57,7 @@ public class JwtUtil {
 			.add("alg", "HS256")
 			.and()
 			.claim("username", customUserDetails.getUsername()) // payload 负载信息
-			.claim("id", customUserDetails.getId()) // payload 负载信息
+			.claim("userId", customUserDetails.getUserId()) // payload 负载信息
 			.claim("roles", customUserDetails.getAuthorities()) // payload 负载信息
 			.id(uuid) // 令牌ID
 			.subject(SUBJECT) // 主题

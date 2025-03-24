@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -84,6 +85,9 @@ public class UserService {
 			.createBy(SysRoleEnum.ADMIN.getRoleName())
 			.isDeleted(0)
 			.build();
+		// 设置用户逻辑id
+		user.setUserId("user-" + UUID.randomUUID().toString().replaceAll("-", "").substring(0, 12));
+
 		return userRepository.save(user);
 	}
 
