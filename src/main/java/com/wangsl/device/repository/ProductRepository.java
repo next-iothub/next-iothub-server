@@ -80,4 +80,19 @@ public interface ProductRepository extends MongoRepository<Product, ObjectId> {
 	 */
 	void deleteByUserIdAndId(String userId, String id);
 
+
+	// 查询产品的所有属性
+	@Query(value = "{ 'userId': ?0, 'productKey': ?1 }", fields = "{ 'thingModel.properties': 1 }")
+	Optional<Product> findPropertiesByUserIdAndProductKey(String userId, String productKey);
+
+	@Query(value = "{ 'userId': ?0, 'productKey': ?1 }", fields = "{ 'thingModel.events': 1 }")
+	Optional<Product> findEventsByUserIdAndProductKey(String userId, String productKey);
+
+
+	@Query(value = "{ 'userId': ?0, 'productKey': ?1 }", fields = "{ 'thingModel.services': 1 }")
+	Optional<Product> findServicesByUserIdAndProductKey(String userId, String productKey);
+
+	@Query(value = "{ 'userId': ?0, 'productKey': ?1 }", fields = "{ 'thingModel': 1 }")
+	Optional<Product> findThingModelByUserIdAndProductKey(String userId, String productKey);
+
 }

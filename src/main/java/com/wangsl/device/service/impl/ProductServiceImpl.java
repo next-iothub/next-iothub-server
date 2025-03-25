@@ -5,7 +5,10 @@ import com.wangsl.common.exception.ExceptionUtil;
 import com.wangsl.common.exception.IothubExceptionEnum;
 import com.wangsl.common.utils.SecurityContextUtil;
 import com.wangsl.device.model.Product;
-import com.wangsl.device.model.dto.*;
+import com.wangsl.device.model.dto.ProductBasicDTO;
+import com.wangsl.device.model.dto.ProductCreateDTO;
+import com.wangsl.device.model.dto.ProductEditDTO;
+import com.wangsl.device.model.dto.ProductTypeOptionsDTO;
 import com.wangsl.device.repository.ProductRepository;
 import com.wangsl.device.service.ProductService;
 import org.springframework.beans.BeanUtils;
@@ -14,11 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Random;
-import java.util.UUID;
-
+import java.util.*;
 
 
 @Service
@@ -30,80 +29,6 @@ public class ProductServiceImpl implements ProductService {
 	public ProductServiceImpl(ProductRepository productRepository) {
 		this.productRepository = productRepository;
 	}
-
-	// /**
-	//  * 创建产品
-	//  *
-	//  * @param productDTO
-	//  * @param currentUserId
-	//  * @return
-	//  */
-	// public Product createProduct(ProductDTO productDTO, ObjectId currentUserId) {
-	// 	// 查重
-	// 	if (productRepository.findByUserIdAndProductName(currentUserId, productDTO.getProductName()).isPresent()) {
-	// 		ExceptionUtil.throwEx(IothubExceptionEnum.ERROR_PRODUCT_NAME_EXIST);
-	// 	}
-	//
-	// 	Product product = Product.builder()
-	// 		.userId(currentUserId)  // 填写用户 ID
-	// 		.productName(productDTO.getProductName())  // 填写产品名称
-	// 		.productKey(generateProductKey())  // 填写产品 Key
-	// 		.description(productDTO.getDescription())  // 填写描述
-	// 		.createTime(new Date())  // 使用当前时间作为创建时间
-	// 		.updateTime(new Date())
-	// 		.productType(productDTO.getProductType())
-	// 		.nodeType(productDTO.getNodeType())
-	// 		.dataFormat(productDTO.getDataFormat())
-	// 		.build();
-	// 	Product res = productRepository.save(product);
-	//
-	// 	return res;
-	// }
-	//
-	// /**
-	//  * 通过productKey查找产品
-	//  * @param productKey
-	//  * @param currentUserId
-	//  * @return
-	//  */
-	// public Product getProductByProductKey(String productKey, ObjectId currentUserId) {
-	// 	Product product = productRepository.findByProductKey(productKey)
-	// 		.filter(p -> p.getUserId().equals(currentUserId))
-	// 		.orElse(null);
-	//
-	// 	if (product == null) {
-	// 		ExceptionUtil.throwEx(IothubExceptionEnum.ERROR_PRODUCT_NAME_EXIST);
-	// 	}
-	//
-	// 	return product;
-	//
-	// }
-	//
-	// /**
-	//  * 根据用户名分页查询产品列表
-	//  * @param userId
-	//  * @param page
-	//  * @param pageSize
-	//  * @return
-	//  */
-	// public Page<Product> getProductsByUserId(ObjectId userId, int page, int pageSize) {
-	// 	// 分页参数
-	// 	Pageable pageable = PageRequest
-	// 		.of(--page, pageSize, Sort.by(Sort.Order.asc("createTime"))); // 按创建时间升序排序
-	// 	return productRepository.findByUserId(userId, pageable);
-	// }
-
-	// /**
-	//  * 根据产品 key 和用户 ID 删除产品
-	//  * @param userId
-	//  * @param productKey
-	//  * @return
-	//  */
-	// public boolean deleteProduct(ObjectId userId, String productKey) {
-	// 	// 确认产品是否存在，并且属于指定用户
-	// 	long deletedCount = productRepository.deleteByUserIdAndProductKey(userId, productKey);
-	// 	return deletedCount > 0; // 如果删除了记录，返回 true
-	// }
 
 
 	// 生成productKey
@@ -145,12 +70,71 @@ public class ProductServiceImpl implements ProductService {
 	// 	return "v1.0.0";
 	// }
 
+	public Product createMockProduct() {
+		return Product.builder()
+			.productKey(generateProductKey2())
+			.productId(generateProductId())
+			.name("智能网关")
+			.description("用于连接物联网设备的智能网关")
+			.category("IoT Gateway")
+			.categoryPath(Arrays.asList("IoT", "Gateway"))
+			.model("GW-1000")
+			.manufacturer("IoT Company")
+			.userId(SecurityContextUtil.getCurrentUserId())
+			.productType("gateway")
+			.networkType("wifi")
+			.protocolType("mqtt")
+			.authType("secret")
+			.dataFormat("json")
+			.status("testing")
+			.tags(Arrays.asList("IoT", "Gateway", "MQTT"))
+			.nodeType("gateway")
+			.dataEncryption(true)
+			.features(Product.Features.builder()
+				.otaSupport(true)
+				.groupControl(true)
+				.localControl(false)
+				.sceneAutomation(true)
+				.edgeComputing(true)
+				.build())
+			.deviceCount(new Product.DeviceCount(100, 80, 50))
+			.thingModel(Product.ThingModel.builder()
+				.properties(Arrays.asList(
+					new Product.ThingModel.Property("p1", "温度", "float", "°C", -40.0, 100.0, 0.1, "rw", true, null),
+					new Product.ThingModel.Property("p2", "湿度", "int", "%", 0.0, 100.0, 1.0, "rw", true, null)
+				))
+				.events(Arrays.asList(
+					new Product.ThingModel.Event("e1", "温度过高", "alert", List.of(
+						new Product.ThingModel.Event.Parameter("param1", "温度值", "float")
+					))
+				))
+				.services(Arrays.asList(
+					new Product.ThingModel.Service("s1", "重启设备", null, null)
+				))
+				.build())
+			.configurations(Product.Configurations.builder()
+				.mqttTopic(new Product.Configurations.MqttTopic(
+					new Product.Configurations.MqttTopic.TopicConfig("device/property", "device/event", "device/service"),
+					new Product.Configurations.MqttTopic.TopicConfig("cloud/property", "cloud/event", "cloud/service")
+				))
+				.defaultSettings(new Product.Configurations.DefaultSettings(30, true))
+				.networkSettings(new Product.Configurations.NetworkSettings(10, 60))
+				.build())
+			.createdAt(new Date())
+			.updatedAt(new Date())
+			.build();
+	}
+
+	public String generateProductId() {
+		// 生成随机字符串作为产品id
+		return "prod-" + UUID.randomUUID().toString().replaceAll("-", "").substring(0, 12);
+	}
+
 	/**
 	 * 创建产品
 	 */
 	@Override
 	public Product createProduct(ProductCreateDTO productCreateDTO) {
-
 
 		// 获取当前用户ID
 		String userId = SecurityContextUtil.getCurrentUserId();
@@ -169,7 +153,7 @@ public class ProductServiceImpl implements ProductService {
 		product.setProductKey(productKey);
 
 		// 设置产品ID
-		product.setProductId("prod-" + UUID.randomUUID().toString().replaceAll("-", "").substring(0, 12));
+		product.setProductId(generateProductId());
 
 		product.setStatus(ProductStatus.DEVELOPMENT.getCode());
 		// 设置用户ID（用于数据分区）
@@ -181,6 +165,9 @@ public class ProductServiceImpl implements ProductService {
 		deviceCount.setActive(0);
 		deviceCount.setOnline(0);
 		product.setDeviceCount(deviceCount);
+
+		// 设置物模型
+		product.setThingModel(new Product.ThingModel(Collections.emptyList(), Collections.emptyList(), Collections.emptyList()));
 
 		// 设置创建和更新时间
 		Date now = new Date();

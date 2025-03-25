@@ -1,7 +1,9 @@
 package com.wangsl.device.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -18,6 +20,9 @@ import java.util.Map;
  */
 @Data
 @Document(collection = "products")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Product {
 	@Id
 	private String id;
@@ -78,6 +83,9 @@ public class Product {
 	 * 设备统计
 	 */
 	@Data
+	@Builder
+	@AllArgsConstructor
+	@NoArgsConstructor
 	public static class DeviceCount {
 		private Integer total;
 		private Integer active;
@@ -89,6 +97,8 @@ public class Product {
 	 */
 	@Data
 	@Builder
+	@AllArgsConstructor
+	@NoArgsConstructor
 	public static class ThingModel {
 		private List<Property> properties;
 		private List<Event> events;
@@ -98,6 +108,9 @@ public class Product {
 		 * 物模型属性
 		 */
 		@Data
+		@AllArgsConstructor
+		@NoArgsConstructor
+		@Builder
 		public static class Property {
 			private String id;
 			private String name;
@@ -115,16 +128,22 @@ public class Product {
 		 * 物模型事件
 		 */
 		@Data
+		@AllArgsConstructor
+		@NoArgsConstructor
+		@Builder
 		public static class Event {
 			private String id;
 			private String name;
 			private String type;  // info, alert, error
-			private List<Parameter> params;
+			private List<Parameter> params; // 事件参数
 
 			/**
 			 * 事件参数
 			 */
 			@Data
+			@AllArgsConstructor
+			@NoArgsConstructor
+			@Builder
 			public static class Parameter {
 				private String id;
 				private String name;
@@ -136,6 +155,9 @@ public class Product {
 		 * 物模型服务
 		 */
 		@Data
+		@AllArgsConstructor
+		@NoArgsConstructor
+		@Builder
 		public static class Service {
 			private String id;
 			private String name;
@@ -146,6 +168,9 @@ public class Product {
 			 * 服务参数
 			 */
 			@Data
+			@AllArgsConstructor
+			@NoArgsConstructor
+			@Builder
 			public static class Parameter {
 				private String id;
 				private String name;
@@ -159,6 +184,8 @@ public class Product {
 	 * 产品配置
 	 */
 	@Data
+	@AllArgsConstructor
+	@NoArgsConstructor
 	@Builder
 	public static class Configurations {
 		private MqttTopic mqttTopic;
@@ -169,6 +196,9 @@ public class Product {
 		 * MQTT主题配置
 		 */
 		@Data
+		@AllArgsConstructor
+		@NoArgsConstructor
+		@Builder
 		public static class MqttTopic {
 			private TopicConfig uplink;
 			private TopicConfig downlink;
@@ -177,6 +207,9 @@ public class Product {
 			 * 主题配置
 			 */
 			@Data
+			@AllArgsConstructor
+			@NoArgsConstructor
+			@Builder
 			public static class TopicConfig {
 				private String property;
 				private String event;
@@ -188,6 +221,9 @@ public class Product {
 		 * 默认设置
 		 */
 		@Data
+		@AllArgsConstructor
+		@NoArgsConstructor
+		@Builder
 		public static class DefaultSettings {
 			private Integer reportInterval;
 			private Boolean alarmEnabled;
@@ -197,6 +233,9 @@ public class Product {
 		 * 网络设置
 		 */
 		@Data
+		@AllArgsConstructor
+		@NoArgsConstructor
+		@Builder
 		public static class NetworkSettings {
 			private Integer reconnectInterval;
 			private Integer keepAliveTimeout;

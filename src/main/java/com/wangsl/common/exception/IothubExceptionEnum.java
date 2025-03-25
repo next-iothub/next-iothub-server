@@ -25,9 +25,12 @@ public enum IothubExceptionEnum implements IothubExceptionMap {
     ERROR_CAN_NOT_DELETE_RESOURCE("900", "默认资源无法删除"),
     ERROR_IN_BLACKLIST("901", "检测到你进行非法操作，已被列入黑名单!"),
     ERROR_DEVICE_STATUS("800", "设备状态实时推送失败"),
-    ERROR_PRODUCT_KEY_INVALID("801", "产品 key 无效"),
+    ERROR_PRODUCT_KEY_INVALID("801", "产品 key 无效，产品不存在"),
     ERROR_PRODUCT_NAME_EXIST("802", "产品名称已存在"),
-    ERROR_DEVICE_NAME_EXIST("810", "设备名已经存在");
+    ERROR_DEVICE_NAME_EXIST("810", "设备名已经存在"),
+    ERROR_PRODUCT_PROPERTY_EXIST("900", "该属性已经存在"),
+    ERROR_PRODUCT_EVENT_EXIST("901", "该事件已经存在"),
+    ERROR_PRODUCT_SERVICE_EXIST("902", "该服务已经存在");
 
 
     private final String code;
